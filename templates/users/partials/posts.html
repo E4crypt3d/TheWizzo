@@ -1,0 +1,37 @@
+<h3 class="text-center mb-2 mt-4 lead">Posts<span class="ml-2">({{puser.post.all.count}})</span></h3>
+<div class="row">
+    {% for post in puser.post.all %}
+    <div class="col my-2 card-hover shadow bg-gradient col-md-4 rounded rounded-5"
+        style="min-height: 320px;height: auto;">
+        <div class="position-relative bg-dark">
+            <img src="{{post.image.url}}" class="card-img-top card-image" alt="{{post}}"
+                style="min-height: 250px; height: 240px;">
+            <div class="position-absolute card-feed text-white">
+                <div class="d-flex flex-row text-white">
+                    <div class="d-inline">{% if user in post.likes.all %}
+                        <i class="fa-solid fa-heart fa-1x text-danger"></i>
+                        {% else %}
+                        <i class="fa-solid fa-heart fa-1x"></i>
+                        {% endif %}
+                        <b class="text-white">{{post.get_likes}}</b>
+                    </div>
+                    <div class="mx-2">
+                        <i class="fa-solid fa-comment mx-1"></i>
+                        <b class="text-white">{{post.comments.all.count}}</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-3">
+            <div class="d-flex flex-row">
+                <h6 class="text-dark mr-1" style="font-size: 14px;">
+                    <a href="{% url 'userprofile' post.user %}" class="text-dark">
+                        {{post.user}}
+                    </a>
+                </h6>
+                <p class="card-text small">{{post.caption}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

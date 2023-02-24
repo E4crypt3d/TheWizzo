@@ -1,0 +1,25 @@
+<h3 class="text-center mb-2 mt-4 lead">Following ({{puser.profile.follows.all.count}})</h3>
+<ul class="list-group mt-5">
+    {% for following in puser.profile.follows.all %}
+    <li class="list-group-item bg-gradient py-md-2 border-0 border-bottom">
+        <div class="d-flex flex-row w-100 my-0">
+            <div class="my-0">
+
+                <img class="img-fluid" src="{{following.profile.profile_pic.url}}" width="42" alt="">
+            </div>
+            <div class="ml-3 flex-grow-1">
+                <a href="{% url 'userprofile' following %}">
+
+                    <h6 class="text-dark font-weight-light">@{{following.username}}</h6>
+                    <p style="margin-top: -6px;" class="small text-dark">{{following.first_name}}
+                        {{following.last_name}}
+                    </p>
+                </a>
+            </div>
+            <div>
+                <button class="mx-auto shadow btn btn-remove">Remove</button>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

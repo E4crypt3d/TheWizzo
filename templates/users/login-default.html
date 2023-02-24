@@ -1,0 +1,50 @@
+{% extends 'notauth-base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+{% if login %}
+Login
+{% else %}
+Register
+{% endif %}{% endblock title %}
+
+
+{% block content %}
+
+
+<body class="text-center container bg-gradient">
+
+    <main class="form-signin w-100 m-auto">
+        <form action="{% url 'userlogin' %}" method="post">
+            <img class="mb-4" src="{% static 'images/logo.png' %}" alt="" width="100" height="100">
+            <h1 class="h3 mb-3 fw-normal text-monospace">Wizzo</h1>
+
+            <div class="form-floating">
+                {% csrf_token %}
+                {{form|crispy}}
+
+            </div>
+
+            {% if login %}
+            <p class="small">Don't have an account? <a href="{% url 'userregister' %}">Sign Up</a></p>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            {% endif %}
+            {% if register %}
+            <p class="small">Already have an account? <a href="{% url 'userlogin' %}">Login</a></p>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
+            {% endif %}
+            <p class="mt-5 mb-3 text-muted">
+                <script>document.write(new Date().getFullYear())</script>
+                @<a href="https://github.com/e4crypt3d" target="_blank">E4CRYPT3D</a>
+            </p>
+        </form>
+    </main>
+    {% endblock content %}
+
+
+
+
+
+</body>

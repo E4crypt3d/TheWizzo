@@ -1,0 +1,31 @@
+<a href="#replies" data-bs-toggle="collapse" data-bs-target="#comment-replies{{comment.id}}" aria-expanded="false"
+    aria-controls="comment-replies{{comment.id}}" style="color:gray">
+    <span>{{comment.replies.all.count}} <i class="fa-solid fa-comment mx-1"></i></span>
+</a>
+<div class="mx-4  collapse" id="comment-replies{{comment.id}}">
+
+    <form method="post" hx-target="#replies{{comment.id}}" hx-post="{% url 'reply-comment' %}">
+        <div class="form-floating d-flex flex-row">
+            {% csrf_token %}
+            <input type="hidden" name="comment" value="{{comment.id}}">
+            <textarea name="reply" class="form-control add-comment bg-gradient small" placeholder="reply"
+                style="height: 35px;"></textarea>
+            <input class="btn small" type="submit" style="font-size: 11px;" value="Reply">
+            <!-- <button type="submit">Post</button> -->
+        </div>
+    </form>
+    <div>
+        {% if comment.replies.all %}
+
+        {% for reply in comment.replies.all %}
+        <p class="my-0">
+            <span class="text-dark mx-1" style="font-weight: 500;">
+                <a href="{% url 'userprofile' reply.user.username %}" style="color: black;">{{reply.user}}</a>
+            </span>
+            <a href="{% url 'userprofile' comment.user.username %}" style="color:#4040a4">@{{comment.user}}</a>
+            {{reply.comment}}
+        </p>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>

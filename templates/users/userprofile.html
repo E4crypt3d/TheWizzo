@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+{{user.username|capfirst}} Profile
+{% endblock title %}
+
+
+{% block profile %}
+active
+{% endblock profile %}
+
+
+{% block content %}
+
+<div class="container">
+    <header class="row">
+        <div class="col-sm-2 col-auto offset-2 mt-2">
+            <div class="position-relative profile-picture">
+                <div>
+                    <img class="rounded-circle w-100" src="{{puser.profile.profile_pic.url}}" alt="profile pic"
+                        height="150px">
+                </div>
+
+                {% if user.is_authenticated and puser == user %}
+
+
+                <div class="profile-change text-white position-absolute">
+                    <form method="post" enctype="multipart/form-data" hx-trigger="change"
+                        hx-post="{% url 'editprofile' user %}">
+                        {% csrf_token %}
+                        <label for="profile_pic" class="file-upload" style="cursor: pointer;">
+                            Edit
+                        </label>
+                        <input accept="image/*" class="d-none" type="file" name="profile_pic" id="profile_pic">
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-8 text-dark mt-2">
+            <div class="d-flex flex-row">
+                <h5 class="mx-2">{{puser.username}}</h5>
+
+                {% if user == puser and user.is_authenticated %}
+                <!-- Button trigger modal -->
+                <div>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#editprofile"
+                        class="btn btn-edit-profile shadow rounded-pill ml-md-3 small"
+                        hx-get="{% url 'editprofile' puser %}" hx-target="#pedit">Edit profile</button>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="editprofile" tabindex="-1" aria-labelledby="editprofileLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-gradient">
+                            <div class="modal-header my-0">
+                                <h6 class="modal-title fs-5" id="editprofileLabel">Edit Profile</h6>
+                                <button type="button" class="btn-remove" data-bs-dismiss="modal"
+                                    aria-label="Close">x</button>
+                            </div>
+                            <div class="modal-body" id="pedit">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn-remove text-dark shadow"
+                                    data-bs-dismiss="modal">Close</button>
+                                <input type="submit" form="profileedit" class="btn-remove text-dark shadow"
+                                    value="Save Changes">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="d-flex flex-row">
+                <div class="mx-md-2 mx-1">
+                    <span class="font-count">{{puser.post.all.count}}</span> posts
+                </div>
+                <div class="mx-md-2 mx-1">
+                    <span class="font-count">{{puser.profile.follows.count}}</span> Following
+                </div>
+                <div class="mx-md-2 mx-1">
+                    <span class="font-count">{{puser.follows.count}}</span> Followers
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <h6 class="profile-full-name mx-2 mt-2 mb-0"><span>{{puser.first_name}}</span>
+                    <span>{{puser.last_name}}</span>
+                </h6>
+                <p class="mx-2 mt-0" style="font-size: small;">{{puser.profile.bio}}</p>
+            </div>
+        </div>
+    </header>
+    <hr class="mb-0 pb-0">
+    <div class="d-flex flex-row justify-content-center mt-0">
+        <div class="mx-md-3 border-dark px-md-4 px-2 profile-link pl-active" hx-get="{%url 'posts' puser %}"
+            hx-target="#user-content" id="posts"><a onclick="activeTab('posts')" class="text-decoration-none"
+                href="#posts">Posts</a> </div>
+        <div class="mx-md-3 border-dark px-2 px-md-4 profile-link" hx-get="{%url 'followers' puser.username %}"
+            hx-target="#user-content" id="followers"><a onclick="activeTab('followers')" href="#followers">Followers</a>
+        </div>
+        <div class="mx-md-3 border-dark px-2 px-md-4 profile-link" hx-get="{%url 'following' puser.username %}"
+            hx-target="#user-content" id="following"><a onclick="activeTab('following')" href="#following">Following</a>
+        </div>
+        <div class="mx-md-3 border-dark px-2 px-md-4 profile-link" hx-get="{% url 'likedpost' puser %}"
+            hx-target="#user-content" id="likedposts"><a onclick="activeTab('likedposts')" href="#likedposts">Liked</a>
+        </div>
+    </div>
+    <div class="container">
+        <div id="user-content" class="bg-gradient">
+            {% include 'users/partials/posts.html' %}
+        </div>
+    </div>
+</div>
+<script>
+    const activeTab = (value) => {
+        let postsElement = document.getElementById('posts');
+        let followersElement = document.getElementById('followers');
+        let followingElement = document.getElementById('following');
+        let likedpostsElement = document.getElementById('likedposts');
+        if (value === "posts") {
+            postsElement.classList.add('pl-active');
+            likedpostsElement.classList.remove('pl-active');
+            followingElement.classList.remove('pl-active');
+            followersElement.classList.remove('pl-active');
+        }
+        else if (value === "followers") {
+            followersElement.classList.add('pl-active');
+            postsElement.classList.remove('pl-active');
+            likedpostsElement.classList.remove('pl-active');
+            followingElement.classList.remove('pl-active');
+        }
+        else if (value === "following") {
+            followingElement.classList.add('pl-active');
+            likedpostsElement.classList.remove('pl-active');
+            postsElement.classList.remove('pl-active');
+            followersElement.classList.remove('pl-active');
+        }
+        else if (value === "likedposts") {
+            likedpostsElement.classList.add('pl-active');
+            postsElement.classList.remove('pl-active');
+            followingElement.classList.remove('pl-active');
+            followersElement.classList.remove('pl-active');
+        }
+    }
+</script>
+{% endblock content %}

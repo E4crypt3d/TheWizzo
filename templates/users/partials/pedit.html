@@ -1,0 +1,11 @@
+{% load crispy_forms_tags %}
+
+
+<form hx-post="{% url 'editprofile' user %}" method="post" id="profileedit" hx-target="#pedit">
+    {% csrf_token %}
+    {{form|crispy}}
+    <div id="div_id_bio" class="mb-3"> <label for="id_bio" class="form-label">
+            Bio
+        </label> <input type="text" name="bio" placeholder="Bio" value="{{user.profile.bio}}" maxlength="150"
+            class="textinput textInput form-control" id="id_bio"> </div>
+</form>

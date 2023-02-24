@@ -1,0 +1,19 @@
+<h3 class="text-center mb-2 mt-4 lead">Followers ({{puser.follows.all.count}})</h3>
+<ul class="list-group mt-5">
+    {% for follower in puser.follows.all %}
+    <li class="list-group-item bg-gradient py-md-2 border-0 border-bottom">
+        <div class="d-flex flex-row w-100 my-0">
+            <div>
+                <img class="img-fluid" src="{{follower.profile_pic.url}}" width="42" alt="">
+            </div>
+            <div class="ml-3 flex-grow-1">
+                <h6 class="text-dark font-weight-light">@{{follower.user.username}}</h6>
+                <p style="margin-top: -6px;" class="small">{{follower.user.first_name}} {{follower.user.last_name}}</p>
+            </div>
+            <div>
+                <button class="btn btn-remove small">Remove</button>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
