@@ -3,15 +3,23 @@
     {% for follower in puser.follows.all %}
     <li class="list-group-item bg-gradient py-md-2 border-0 border-bottom">
         <div class="d-flex flex-row w-100 my-0">
-            <div>
-                <img class="img-fluid" src="{{follower.profile_pic.url}}" width="42" alt="">
+            <div style="width: 52px;">
+                <img class="rounded-circle" src="{{follower.profile_pic.url}}" alt="profile pic"
+                    style="height: 46px;width: 49px;">
             </div>
-            <div class="ml-3 flex-grow-1">
-                <h6 class="text-dark font-weight-light">@{{follower.user.username}}</h6>
-                <p style="margin-top: -6px;" class="small">{{follower.user.first_name}} {{follower.user.last_name}}</p>
+            <div class="ml-3 flex-sm-grow-1">
+                <a href="{% url 'userprofile' follower.user %}">
+                    <h6 class="text-dark font-weight-light">@{{follower.user.username}}</h6>
+                    <p style="margin-top: -6px;" class="small text-secondary">{{follower.user.first_name}}
+                        {{follower.user.last_name}}
+                    </p>
+                </a>
             </div>
             <div>
-                <button class="btn btn-remove small">Remove</button>
+                <button hx-post="{% url 'removefollower' follower.user %}"
+                    hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-target="#user-content"
+                    hx-vals='{"wizu":"{{follower.user.id}}","cprof":"{{puser.id}}"}'
+                    class="btn-remove small">Remove</button>
             </div>
         </div>
     </li>

@@ -3,11 +3,11 @@
     {% for following in puser.profile.follows.all %}
     <li class="list-group-item bg-gradient py-md-2 border-0 border-bottom">
         <div class="d-flex flex-row w-100 my-0">
-            <div class="my-0">
-
-                <img class="img-fluid" src="{{following.profile.profile_pic.url}}" width="42" alt="">
+            <div class="my-0" style="width: 52px;">
+                <img class="rounded-circle" src="{{following.profile.profile_pic.url}}" alt="profile pic"
+                    style="height: 46px;">
             </div>
-            <div class="ml-3 flex-grow-1">
+            <div class="ml-3 flex-sm-grow-1">
                 <a href="{% url 'userprofile' following %}">
 
                     <h6 class="text-dark font-weight-light">@{{following.username}}</h6>

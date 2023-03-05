@@ -10917,6 +10917,7 @@ a[data-toggle="collapse"] {
 	border: none;
 	font-size: smaller;
 	transition: all 0.5s ease-in-out;
+	padding: 4px;
 }
 .btn-remove:hover {
 	background: linear-gradient(to left, #f0cf8e, #b2ecba);

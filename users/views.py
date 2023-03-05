@@ -106,8 +106,22 @@ def follow_user(request, user):
 
 
 @login_required
+def remove_follower(request, user):
+    remove_user_id = request.POST.get('wizu', None)
+    current_user_id = request.POST.get('cprof', None)
+    current_profile = User.objects.get(id=current_user_id)
+    cache.delete('suggestions', version=request.user.id)
+    if remove_user_id and user and current_profile == request.user:
+        remove_follow = User.objects.get(username=user, id=int(remove_user_id))
+        print(remove_follow)
+        remove_follow.profile.follows.remove(request.user)
+        return render(request, 'users/partials/followers.html', {'puser': request.user})
+    else:
+        return HttpResponse('<h5 class="text-danger my-5 text-center">Something Went Wrong :(</h5>')
+
+
+@login_required
 def edit_profile(request, user):
-    print(user)
     user_check = User.objects.prefetch_related('profile').get(username=user)
     if user_check == request.user and request.user.is_authenticated:
         if request.method == "POST":
@@ -124,7 +138,10 @@ def edit_profile(request, user):
                 form = CustomProfileEditForm(post_data, instance=request.user)
                 if form.is_valid():
                     form.save()
-                    return render(request, 'users/partials/pedit.html', {'form': form})
+                    response = render(
+                        request, 'users/partials/pedit.html', {'form': form})
+                    response['HX-Trigger'] = 'reload'
+                    return response
                 else:
                     return render(request, 'users/partials/pedit.html', {'form': form})
         else:
