@@ -47,3 +47,23 @@ class Comment(models.Model):
         if self.reply:
             self.isreply = True
         return super().save(*args, **kwargs)
+
+
+class Notification(models.Model):
+    notification_types = [
+        ('1', 'Follow'),
+        ('2', 'Like'),
+        ('3', 'Comment'),
+        ("4", "Reply"),
+        ("5", "Comment-Like")
+    ]
+    notification = models.CharField(max_length=255, null=True, blank=True)
+    user = models.ForeignKey(
+        User, related_name='reciever', on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        'Post', related_name='noti_post', on_delete=models.CASCADE)
+    noti_type = models.CharField(max_length=64, choices=notification_types)
+    sender = models.ForeignKey(
+        User, related_name="sender", on_delete=models.CASCADE)
+    is_seen = models.BooleanField(default=False, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

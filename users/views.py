@@ -1,5 +1,5 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from users.models import User
@@ -86,12 +86,17 @@ def posts(request, user):
 def unfollow_user(request, user):
     cache.delete('suggestions', version=request.user.id)
     unfollow_user_id = request.POST.get('wizu', None)
-    if unfollow_user_id and user:
+    current_user_id = request.POST.get('cprof', None)
+    current_user = User.objects.get(id=current_user_id)
+    if unfollow_user_id and user and current_user == request.user:
         unfollow_user = User.objects.get(
             username=user, id=unfollow_user_id)
+        print(unfollow_user)
         user = request.user
         user.profile.follows.remove(unfollow_user)
-        return redirect('wizzo-home')
+        return render(request, 'users/partials/following.html', {'puser': user})
+    else:
+        return HttpResponseNotFound()
 
 
 @login_required
@@ -117,7 +122,7 @@ def remove_follower(request, user):
         remove_follow.profile.follows.remove(request.user)
         return render(request, 'users/partials/followers.html', {'puser': request.user})
     else:
-        return HttpResponse('<h5 class="text-danger my-5 text-center">Something Went Wrong :(</h5>')
+        return HttpResponseNotFound()
 
 
 @login_required

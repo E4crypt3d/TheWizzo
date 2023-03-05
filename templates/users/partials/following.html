@@ -16,9 +16,16 @@
                     </p>
                 </a>
             </div>
+
+            {% if puser == user %}
+
+
             <div>
-                <button class="mx-auto shadow btn btn-remove">Remove</button>
+                <button class="mx-auto shadow btn btn-remove" hx-post="{% url 'unfollow' following %}"
+                    hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-target="#user-content"
+                    hx-vals='{"wizu":"{{following.id}}","cprof":"{{puser.id}}"}'>Unfollow</button>
             </div>
+            {% endif %}
         </div>
     </li>
     {% endfor %}

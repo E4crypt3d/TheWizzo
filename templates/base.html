@@ -32,7 +32,13 @@
             <a href="{% url 'userprofile' user.username %}">Profile</a>
           </li>
           <li>
-            <a href="#">Notifications</a>
+            <a href="#" class="">Notifications</a>
+            <a href="#" type="button" class="position-relative">
+              Notifications
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+              </span>
+            </a>
           </li>
           <li>
             <a href="{% url 'userlogout' %}">Log out</a>
@@ -68,7 +74,11 @@
                 <a class="nav-link" href="{% url 'wizzo-home' %}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Notifications</a>
+                <a class="nav-link position-relative" href="#">Notifications
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    99+
+                  </span>
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'userprofile' user.username %}">Profile</a>

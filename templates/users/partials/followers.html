@@ -15,12 +15,15 @@
                     </p>
                 </a>
             </div>
+
+            {% if puser == user %}
             <div>
                 <button hx-post="{% url 'removefollower' follower.user %}"
                     hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-target="#user-content"
                     hx-vals='{"wizu":"{{follower.user.id}}","cprof":"{{puser.id}}"}'
                     class="btn-remove small">Remove</button>
             </div>
+            {% endif %}
         </div>
     </li>
     {% endfor %}
