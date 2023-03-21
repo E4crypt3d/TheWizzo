@@ -1,6 +1,6 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from .models import Post
+from .models import Post, Notification
 from PIL import Image
 import io
 from django.core.files.base import ContentFile
@@ -36,3 +36,18 @@ def resize_post_image(sender, instance, **kwargs):
 
         instance.image.save(
             instance.image.name, ContentFile(temp_image.getvalue()), save=False)
+#  notification_types = [
+#         ('1', 'Follow'),
+#         ('2', 'Like'),
+#         ('3', 'Comment'),
+#         ("4", "Reply"),
+#         ("5", "Comment-Like")
+#     ]
+
+
+@receiver(pre_save, sender=Notification)
+def handle_notifications(sender, instance, **kwargs):
+    if instance.noti_type == "1":
+        instance.notification = f"{instance.sender} just started following you!"
+    elif instance.noti_type == "2":
+        instance.notification = f"{instance.sender} liked your post"
