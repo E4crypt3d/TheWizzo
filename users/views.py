@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from users.models import User
+from usertimeline.models import Notification
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, CustomProfileEditForm
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
@@ -107,6 +108,8 @@ def follow_user(request, user):
         follow_user = User.objects.get(username=user, id=follow_user_id)
         user = request.user
         user.profile.follows.add(follow_user)
+        Notification.objects.create(
+            receiver=follow_user, sender=user, noti_type="1")
         return HttpResponse("Followed")
 
 

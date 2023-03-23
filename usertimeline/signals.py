@@ -50,4 +50,6 @@ def handle_notifications(sender, instance, **kwargs):
     if instance.noti_type == "1":
         instance.notification = f"{instance.sender} just started following you!"
     elif instance.noti_type == "2":
-        instance.notification = f"{instance.sender} liked your post"
+        instance.notification = f"{instance.sender} liked your post."
+    elif instance.noti_type == "3":
+        instance.notification = f"{instance.sender} commented on your post. '{instance.post.caption[:20]}'"

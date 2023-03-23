@@ -49,7 +49,16 @@ class Comment(models.Model):
         return super().save(*args, **kwargs)
 
 
+class NotificationManager(models.Manager):
+    def all(self):
+        return super().filter(is_seen=False)
+
+    def get_all(self):
+        return super().get_queryset().all()
+
+
 class Notification(models.Model):
+    objects = NotificationManager()
     notification_types = [
         ('1', 'Follow'),
         ('2', 'Like'),
@@ -61,7 +70,7 @@ class Notification(models.Model):
     receiver = models.ForeignKey(
         User, related_name='receiver', on_delete=models.CASCADE)
     post = models.ForeignKey(
-        'Post', related_name='noti_post', on_delete=models.CASCADE)
+        'Post', related_name='noti_post', on_delete=models.CASCADE, null=True, blank=True)
     noti_type = models.CharField(max_length=64, choices=notification_types)
     sender = models.ForeignKey(
         User, related_name="sender", on_delete=models.CASCADE)
