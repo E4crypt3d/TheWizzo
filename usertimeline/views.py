@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.http import HttpResponseNotFound
 from users.forms import CustomAuthenticationForm
 from usertimeline.models import Post, Comment, Notification
@@ -102,4 +102,16 @@ def like_post(request):
                 post.save()
                 return HttpResponse(f'<i class="fa-solid fa-heart fa-1x mx-1 text-danger"></i> <b class="mx-1 d-block text-black-50">{post.get_likes()} likes</b>')
     except Exception:
+        return HttpResponseNotFound()
+
+
+@login_required
+def read_notification(request, user):
+    if request.method == 'POST':
+        user_check = get_object_or_404(User, username=user)
+        if request.user == user_check:
+            Notification.objects.filter(
+                receiver=request.user, is_seen=False).update(is_seen=True)
+            return render(request, 'usertimeline/partials/notifications.html')
+    else:
         return HttpResponseNotFound()

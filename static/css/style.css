@@ -10996,3 +10996,14 @@ a[data-toggle="collapse"] {
 	border-bottom-right-radius: 25px;
 	background-color: #343a40bf;
 }
+
+.notification-bar {
+	font-size: smaller;
+}
+
+.clear-notifications {
+	font-size: smaller;
+}
+.clear-notifications:hover {
+	color: black !important;
+}
