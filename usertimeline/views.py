@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, JsonResponse
 from users.forms import CustomAuthenticationForm
 from usertimeline.models import Post, Comment, Notification
 from users.models import User
+from django.db.models import Q
 from users.utils import get_suggestions
 from django.core.cache import cache
 
@@ -113,5 +114,23 @@ def read_notification(request, user):
             Notification.objects.filter(
                 receiver=request.user, is_seen=False).update(is_seen=True)
             return render(request, 'usertimeline/partials/notifications.html')
+    else:
+        return HttpResponseNotFound()
+
+
+@login_required
+def search_users(request):
+    if request.method == "POST":
+        query = request.POST.get('query', False)
+        if query and len(query) >= 3:
+            search_results = User.objects.prefetch_related('profile').filter(
+                Q(username__icontains=query) |
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query)
+
+            )
+            return render(request, 'usertimeline/partials/search.html', {'searched': search_results})
+        else:
+            return HttpResponse()
     else:
         return HttpResponseNotFound()

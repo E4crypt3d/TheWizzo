@@ -155,3 +155,4 @@ def edit_profile(request, user):
         else:
             form = CustomProfileEditForm(instance=request.user)
             return render(request, 'users/partials/pedit.html', {'form': form})
+

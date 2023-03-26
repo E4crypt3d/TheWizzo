@@ -1,0 +1,11 @@
+{% for suser in searched %}
+<div class="rounded-5 border-bottom border-secondary d-flex flex-row">
+    <a href="{% url 'userprofile' suser %}">
+        <img src="{{suser.profile.profile_pic.url}}" width="10%" alt="">
+        <div class="my-0 p-1">
+            <h6 style="margin-bottom: -4px;">{{suser.username}}</h6>
+            <span class="d-block small">{{suser.get_full_name}}</span>
+        </div>
+    </a>
+</div>
+{% endfor %}

@@ -11007,3 +11007,11 @@ a[data-toggle="collapse"] {
 .clear-notifications:hover {
 	color: black !important;
 }
+.search-results {
+	z-index: 999;
+	border: 1px solid #0069d9;
+	border-radius: 4px;
+}
+.search-bar:hover .search-results {
+	display: block !important;
+}

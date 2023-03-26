@@ -1,29 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 {% load static %}
 
 <head>
 	<title>Wizzo | {% block title %}{% endblock title %}</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet" />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 		integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="{% static 'css/style.css' %}">
-	<link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+	<link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon" />
 </head>
 
 <body>
-
 	<div class="wrapper d-flex align-items-stretch">
 		<nav id="sidebar">
 			<div class="p-4 pt-5">
 				<a href="#" class="img logo rounded-circle mb-5"
 					style="background-image: url({{user.profile.profile_pic.url}});"></a>
-				<p class="text-center -mt-50 profile-name">{{user.first_name}} {{user.last_name}}</p>
+				<p class="text-center -mt-50 profile-name">
+					{{user.first_name}} {{user.last_name}}
+				</p>
 				<ul class="list-unstyled components mb-5">
 					<li class="{% block home %}{% endblock home %}">
 						<a href="{% url 'wizzo-home' %}">Home</a>
@@ -41,39 +42,48 @@
 
 				<div class="footer">
 					<p>
-						© 2023 TheWizzo. All rights reserved. Designed by <a href="https://github.com/e4crypt3d"
-							target="_blank" class="text-decoration-none text-secondary">E4CRYTP3D</a>.
+						© 2023 TheWizzo. All rights reserved. Designed by
+						<a href="https://github.com/e4crypt3d" target="_blank"
+							class="text-decoration-none text-secondary">E4CRYTP3D</a>.
 					</p>
 				</div>
-
 			</div>
 		</nav>
 
 		<!-- Page Content  -->
 		<div id="content" class="p-4 p-md-5 bg-gradient">
-
 			<nav class="navbar navbar-expand-lg navbar-light navbar-gradient rounded-pill">
 				<div class="container-fluid">
-
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 						<i class="fa fa-bars"></i>
 						<span class="sr-only">Menu</span>
 					</button>
+
 					<button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
 						data-bs-toggle="collapse" data-bs-target="#topnavbar" aria-expanded="false"
 						aria-controls="topnavbar">
 						<i class="fa fa-bars"></i>
 					</button>
+
 					<div class="collapse navbar-collapse" id="topnavbar">
 						<ul class="nav navbar-nav ml-auto">
+							<li class="nav-item my-3 my-lg-0">
+								<div class="position-relative search-bar">
+									<input hx-post="{% url 'search' %}" hx-trigger="keyup changed delay:500ms"
+										hx-vals='{"csrfmiddlewaretoken":"{{csrf_token}}"}'
+										style="border-radius: 20px; background-color: transparent" type="text"
+										class="form-control border-dark" placeholder="Search" aria-label="Search"
+										hx-target="#searched" name="query" />
+									<div class="position-absolute p-2 mx-auto w-100 bg-white bg-gradient search-results z-3 d-none"
+										id="searched">
+									</div>
+								</div>
+							</li>
 							<li class="nav-item active">
 								<a class="nav-link" href="{% url 'wizzo-home' %}">Home</a>
 							</li>
 							<li class="nav-item position-relative" id="notifications">
-
-
 								{% include 'usertimeline/partials/notifications.html' %}
-
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'userprofile' user.username %}">Profile</a>
@@ -81,17 +91,12 @@
 							<li class="nav-item">
 								<a class="nav-link" href="#">Support</a>
 							</li>
-
 						</ul>
 					</div>
 				</div>
 			</nav>
 
-
-			{% block content %}
-
-			{% endblock content %}
-
+			{% block content %} {% endblock content %}
 		</div>
 	</div>
 	<script src="{% static 'js/jquery.min.js' %}"></script>
