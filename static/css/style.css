@@ -11009,9 +11009,16 @@ a[data-toggle="collapse"] {
 }
 .search-results {
 	z-index: 999;
-	border: 1px solid #0069d9;
+	border: 1px solid #9c9c9c;
 	border-radius: 4px;
 }
 .search-bar:hover .search-results {
 	display: block !important;
+}
+
+.sa {
+	color: var(--secondary);
+}
+.sa:hover {
+	color: #1a1818;
 }

@@ -1,11 +1,28 @@
 {% for suser in searched %}
 <div class="rounded-5 border-bottom border-secondary d-flex flex-row">
-    <a href="{% url 'userprofile' suser %}">
-        <img src="{{suser.profile.profile_pic.url}}" width="10%" alt="">
-        <div class="my-0 p-1">
+    <a class="sa" href="{% url 'userprofile' suser %}" style="width: 35px;">
+        <img src="{{suser.profile.profile_pic.url}}" width="100%" alt="">
+    </a>
+    <div class="my-0 p-1 flex-grow-1">
+        <a class="sa" href="{% url 'userprofile' suser %}">
             <h6 style="margin-bottom: -4px;">{{suser.username}}</h6>
             <span class="d-block small">{{suser.get_full_name}}</span>
-        </div>
-    </a>
+        </a>
+    </div>
+
+    {% if suser in user.profile.follows.all %}
+
+
+    <div>
+        <button class="mx-auto shadow btn btn-remove" hx-post="{% url 'unfollow' suser %}"
+            hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-target="#user-content"
+            hx-vals='{"wizu":"{{suser.id}}","cprof":"{{user.id}}"}'>Unfollow</button>
+    </div>
+    {% else %}
+    <div>
+        <button hx-post="{% url 'follow' suser %}" hx-headers='{"X-CSRFToken": "{{csrf_token}}"}'
+            hx-vals='{"wizu":"{{suser.id}}"}' class="bg-gradient btn-follow small">Follow</button>
+    </div>
+    {% endif %}
 </div>
 {% endfor %}

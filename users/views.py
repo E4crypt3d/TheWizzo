@@ -92,12 +92,15 @@ def unfollow_user(request, user):
     if unfollow_user_id and user and current_user == request.user:
         unfollow_user = User.objects.get(
             username=user, id=unfollow_user_id)
-        print(unfollow_user)
         user = request.user
         user.profile.follows.remove(unfollow_user)
         return render(request, 'users/partials/following.html', {'puser': user})
     else:
-        return HttpResponseNotFound()
+        unfollow_user = User.objects.get(
+            username=user, id=unfollow_user_id)
+        user = request.user
+        user.profile.follows.remove(unfollow_user)
+        return HttpResponse("Unfollowed")
 
 
 @login_required
@@ -121,7 +124,6 @@ def remove_follower(request, user):
     cache.delete('suggestions', version=request.user.id)
     if remove_user_id and user and current_profile == request.user:
         remove_follow = User.objects.get(username=user, id=int(remove_user_id))
-        print(remove_follow)
         remove_follow.profile.follows.remove(request.user)
         return render(request, 'users/partials/followers.html', {'puser': request.user})
     else:
@@ -155,4 +157,3 @@ def edit_profile(request, user):
         else:
             form = CustomProfileEditForm(instance=request.user)
             return render(request, 'users/partials/pedit.html', {'form': form})
-

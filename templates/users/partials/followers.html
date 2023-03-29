@@ -1,4 +1,5 @@
 <h3 class="text-center mb-2 mt-4 lead">Followers ({{puser.follows.all.count}})</h3>
+{{puser}}
 <ul class="list-group mt-5">
     {% for follower in puser.follows.all %}
     <li class="list-group-item bg-gradient py-md-2 border-0 border-bottom">

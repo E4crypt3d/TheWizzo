@@ -73,6 +73,27 @@ active
                     </div>
                 </div>
                 {% endif %}
+
+                {% if puser != user %}
+
+
+                {% if  puser not in user.profile.follows.all%}
+                <div>
+                    <button hx-post="{% url 'follow' puser %}" hx-headers='{"X-CSRFToken": "{{csrf_token}}"}'
+                        hx-vals='{"wizu":"{{puser.id}}"}'
+                        class="border border-dark bg-gradient btn-follow small">Follow</button>
+                </div>
+                {{puser}}
+                {% else %}
+                <div>
+                    {{puser}}
+                    <button class="border border-dark small shadow btn btn-remove" hx-post="{% url 'unfollow' puser %}"
+                        hx-headers='{"X-CSRFToken": "{{csrf_token}}"}'
+                        hx-vals='{"wizu":"{{puser.id}}","cprof":"{{puser.id}}"}'>Unfollow</button>
+                </div>
+                {% endif %}
+                {% endif %}
+
             </div>
             <div class="d-flex flex-row">
                 <div class="mx-md-2 mx-1">
