@@ -1,0 +1,104 @@
+{% for post in posts %}
+<div class="w-75 my-3">
+    <div class="d-flex flex-column align-content-center justify-content-center">
+        <div class="d-flex flex-row mx-1">
+            <a href="{% url 'userprofile' post.user.username %}" class="user-link">
+                <img class="mr-3 position-relative rounded-circle" src="{{post.user.profile.profile_pic.url}}"
+                    alt="{{post.user.first_name}}'s Profile Pic" style="height: 45px;
+                                width: 83%;">
+            </a>
+            <p class="flex-grow-1 text-dark my-0 align-self-start">
+                <a class="user-link" href="{% url 'userprofile' post.user.username %}">
+                    {{post.user}}<span class="mx-1 font-weight-bold text-secondary">•</span>
+                    <span class="small text-secondary">{{post.post_created|timesince}} ago</span></a>
+            </p>
+
+            {% if post.user != request.user %}
+            <div class="dropdown">
+                <button class="btn-more dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fa-regular fa-square-caret-down"></i></button>
+                <ul class="dropdown-menu bg-gradient">
+                    <li class="small py-0"><a hx-vals='{"wizu":"{{post.user.id}}"}'
+                            hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-post="{% url 'unfollow' post.user %}"
+                            class="dropdown-item border-bottom border-secondary"
+                            href="{% url 'unfollow'  post.user %}">Unfollow</a></li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <img class="card-img w-100" src="{{post.image.url}}" alt="{{post.caption}}" style="min-height: 15rem;">
+        <div>
+            <form method="post" hx-post="{% url 'post-like' %}" class="d-inline" hx-target="#post-like{{post.id}}"
+                hx-trigger="click">
+                {% csrf_token %}
+                <input type="hidden" name="post" value="{{post.id}}">
+                <div id="post-like{{post.id}}" class="d-inline">
+                    {% if user in post.likes.all %}
+                    <i class="fa-solid fa-heart fa-1x mx-1 text-danger"></i>
+                    {% else %}
+                    <i class="fa-solid fa-heart fa-1x mx-1"></i>
+                    {% endif %}
+                    <b class="mx-1 d-block text-black-50">{{post.get_likes}} likes</b>
+                </div>
+            </form>
+        </div>
+        <div style="margin-bottom: -16px;">
+            <p class="text-dark mx-1 font-weight-bold">{{post.user}}
+                <span class="text-dark ml-2 font-weight-lighter">{{post.caption}}</span>
+            </p>
+        </div>
+        <div class="mx-1 mt-0" id="comment-content{{post.id}}">
+            <a href="#comments" role="button" style="color:rgb(142, 142, 142);" data-bs-toggle="collapse"
+                data-bs-target="#comment-block{{post.id}}" aria-expanded="false"
+                aria-controls="comment-block{{post.id}}">
+                View all {{post.comments.all.count}} comments
+            </a>
+            <div>
+                <form method="post" hx-target="#comment-content{{post.id}}" hx-post="{% url 'add-comment' %}">
+                    <div class="form-floating d-flex flex-row">
+                        {% csrf_token %}
+                        <input type="hidden" name="post" value="{{post.id}}">
+                        <textarea name="comment" class="form-control add-comment bg-gradient small"
+                            placeholder="add a comment" style="height: 35px;"></textarea>
+                        <input class="btn small" type="submit" style="font-size: 14px;" value="Post">
+                        <!-- <button type="submit">Post</button> -->
+                    </div>
+                </form>
+            </div>
+            <div class="collapse" id="comment-block{{post.id}}">
+                {% for comment in post.comments.all %}
+                {% if not comment.isreply%}
+                <div class="my-0"><span class="text-dark mx-1" style="font-weight: 500;">{{comment.user.username}}</span
+                        class="ml-1">{{comment.comment}}
+                    <div class="my-0 small mx-3">
+                        <span class="mr-2">
+                            <form method="post" hx-post="{% url 'comment-like' %}" class="d-inline"
+                                hx-target="#like-fb{{comment.id}}" hx-trigger="click">
+                                <div id="like{{comment.id}}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="comment" value="{{comment.id}}">
+                                    <div id="like-fb{{comment.id}}" class="my-0 d-inline">
+                                        {{comment.get_likes.count}}
+                                        {% if user in comment.likes.all %}
+                                        <i class="fa-solid fa-heart fa-1x mx-1 text-danger"></i>
+                                        {% else %}
+                                        <i class="fa-solid fa-heart fa-1x mx-1"></i>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </form>
+                        </span>
+
+                        <div id="replies{{comment.id}}" class="d-inline">
+                            {% include 'usertimeline/partials/reply.html' %}
+
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

@@ -31,7 +31,7 @@ def resize_post_image(sender, instance, **kwargs):
         bottom = top + new_height
         uploaded_image = uploaded_image.crop((left, top, right, bottom))
         temp_image = io.BytesIO()
-        uploaded_image.save(temp_image, format="JPEG",
+        uploaded_image.save(temp_image, format="PNG",
                             optimize=True, quality=100)
 
         instance.image.save(

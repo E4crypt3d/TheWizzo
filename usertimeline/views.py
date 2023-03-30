@@ -134,3 +134,22 @@ def search_users(request):
             return HttpResponse()
     else:
         return HttpResponseNotFound()
+
+
+@login_required
+def posts(request):
+    if request.method == "POST":
+        caption = request.POST.get('caption', False)
+        post_image = request.FILES.get('post-image')
+        if caption and post_image:
+            Post.objects.create(
+                image=post_image, user=request.user, caption=caption)
+            followed = request.user.profile.follows.all()
+            posts = []
+            for i in followed:
+                if i.post.all().exists():
+                    posts += [i for i in i.post.all()]
+            posts += [i for i in request.user.post.all() if i]
+            return render(request, 'usertimeline/partials/posts.html', {'posts': posts})
+    else:
+        return HttpResponseNotFound()
