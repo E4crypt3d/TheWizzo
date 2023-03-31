@@ -32,8 +32,8 @@
 					<li class="{% block profile %}{% endblock profile %}">
 						<a href="{% url 'userprofile' user.username %}">Profile</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">About Us</a>
+					<li class="nav-item {% block about %}{% endblock about %}">
+						<a class="nav-link" href="{% url 'about' %}">About Us</a>
 					</li>
 					<li>
 						<a href="{% url 'userlogout' %}">Log out</a>

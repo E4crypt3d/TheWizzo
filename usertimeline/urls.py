@@ -3,6 +3,7 @@ from usertimeline import views
 
 
 urlpatterns = [
+    path("about-us", views.about, name="about"),
     path("posts", views.posts, name="posts"),
     path("<str:user>/<int:post_id>/delete_post",
          views.delete_post, name="delete-post"),

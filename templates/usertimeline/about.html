@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} About Us
+{% endblock title %}
+
+{% block about %}
+active
+{% endblock about %}
+
+{% block content %}
+
+<header class="bg-gradient py-5">
+    <div class="container">
+        <h1 class="display-4">About Us</h1>
+        <p class="lead">We are a social media platform that allows users to follow and interact with each other through
+            posts and comments.</p>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h2>Our Vision</h2>
+                <p>We envision a world where people can connect and engage with each other in a safe and meaningful way.
+                </p>
+            </div>
+            <div class="col-md-6 mb-4">
+                <h2>Our Mission</h2>
+                <p>Our mission is to provide a platform that empowers people to express themselves and connect with
+                    others, while ensuring their safety and privacy.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

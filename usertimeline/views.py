@@ -27,6 +27,10 @@ def home(request):
         return redirect('userlogin')
 
 
+def about(request):
+    return render(request, 'usertimeline/about.html')
+
+
 @login_required
 def add_comment(request):
     try:
