@@ -169,5 +169,5 @@ def delete_post(request, user, post_id):
                         posts += [i for i in i.post.all()]
                 posts += [i for i in request.user.post.all() if i]
                 return render(request, 'usertimeline/partials/posts.html', {'posts': posts})
-        except Exception as e:
-            print(e)
+        except Exception:
+            return HttpResponseNotFound()
