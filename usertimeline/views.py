@@ -27,6 +27,7 @@ def home(request):
         return redirect('userlogin')
 
 
+@login_required
 def about(request):
     return render(request, 'usertimeline/about.html')
 
