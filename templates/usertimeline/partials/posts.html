@@ -13,18 +13,25 @@
                     <span class="small text-secondary">{{post.post_created|timesince}} ago</span></a>
             </p>
 
-            {% if post.user != request.user %}
+
             <div class="dropdown">
                 <button class="btn-more dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false"><i class="fa-regular fa-square-caret-down"></i></button>
                 <ul class="dropdown-menu bg-gradient">
+                    {% if post.user != request.user %}
                     <li class="small py-0"><a hx-vals='{"wizu":"{{post.user.id}}"}'
                             hx-headers='{"X-CSRFToken": "{{csrf_token}}"}' hx-post="{% url 'unfollow' post.user %}"
                             class="dropdown-item border-bottom border-secondary"
                             href="{% url 'unfollow'  post.user %}">Unfollow</a></li>
+                    {% else %}
+                    <li class="small py-0"><a hx-vals='{"post":"{{post.id}}"}'
+                            hx-headers='{"X-CSRFToken": "{{csrf_token}}"}'
+                            hx-post="{% url 'delete-post' post.user post.id %}" hx-target="#posts-content"
+                            class="dropdown-item border-bottom border-secondary" style="cursor: pointer;">Delete
+                            Post</a></li>
+                    {% endif %}
                 </ul>
             </div>
-            {% endif %}
         </div>
         <img class="card-img w-100" src="{{post.image.url}}" alt="{{post.caption}}" style="min-height: 15rem;">
         <div>

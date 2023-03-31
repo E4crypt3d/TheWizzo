@@ -153,3 +153,21 @@ def posts(request):
             return render(request, 'usertimeline/partials/posts.html', {'posts': posts})
     else:
         return HttpResponseNotFound()
+
+
+def delete_post(request, user, post_id):
+    if request.method == "POST":
+        try:
+            user = User.objects.get(username=user)
+            post = Post.objects.get(id=post_id)
+            if user == request.user and post:
+                post.delete()
+                followed = request.user.profile.follows.all()
+                posts = []
+                for i in followed:
+                    if i.post.all().exists():
+                        posts += [i for i in i.post.all()]
+                posts += [i for i in request.user.post.all() if i]
+                return render(request, 'usertimeline/partials/posts.html', {'posts': posts})
+        except Exception as e:
+            print(e)
